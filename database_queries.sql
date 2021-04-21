@@ -1,4 +1,3 @@
-
 --- TASK 5 UPDATE, INSERT, SELECT, DELETE ---
 
 insert
@@ -27,19 +26,6 @@ delete
                  from restaurants."Client"
                  where first_nm = 'Liza' and last_nm = 'Neledova' and middle_nm = 'Dmitrovna'));
 
-insert
-    into restaurants."Order"(RESTAURANT_ID, WORKER_ID, CLIENT_ID, TRANSACTION_DTTM, QUANTITY_OF_DISHES_AMT)
-    values ((select distinct restaurant_id
-                 from restaurants."Restaurant"
-                 where address = 'Golubeva, 9'),
-            (select distinct worker_id
-                 from restaurants."Worker"
-                 where first_nm = 'Roman' and last_nm = 'Ivanov'and middle_nm = 'Danilovich'),
-            (select distinct client_id
-                 from restaurants."Client"
-                 where first_nm = 'Liza' and last_nm = 'Neledova' and middle_nm = 'Dmitrovna'),
-            current_date, 1
-           );
 
 select dish_nm
     from restaurants."Dish"
@@ -177,3 +163,8 @@ select distinct row_number() over (partition by address order by salary_amt, bir
     from restaurants."Restaurant" r
     inner join restaurants."Worker" w
     on r.restaurant_id = w.restaurant_id;
+
+select first_nm, last_nm,
+    lag(salary_amt, 1, 0) over (order by salary_amt) as previous,
+    lead(salary_amt, 1, 0) over (order by salary_amt) as next
+    from restaurants."Worker" worker;
